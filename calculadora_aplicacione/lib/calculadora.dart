@@ -243,7 +243,12 @@ class CalculadoraState extends State<Calculadora> {
       style: ElevatedButton.styleFrom(
         shape: CircleBorder(),
         padding: EdgeInsets.all(25),
-        backgroundColor: Colors.red, // Color rojo para borrar
+        backgroundColor: const Color.fromARGB(
+          255,
+          170,
+          47,
+          38,
+        ), // Color rojo para borrar
       ),
       child: Text(
         texto,

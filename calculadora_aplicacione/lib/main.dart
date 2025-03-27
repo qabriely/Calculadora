@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Calculadora',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       initialRoute: '/', // Ruta inicial
-      routes: rutas,
+      routes: rutas, // rutas definidas en ruta.dart
     );
   }
 }
