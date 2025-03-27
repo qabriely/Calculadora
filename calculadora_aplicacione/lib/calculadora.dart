@@ -13,12 +13,11 @@ class CalculadoraState extends State<Calculadora> {
   String _output = ''; // Resultado de la operación
   bool _esNuevoCalculo = true; // Control de nuevo cálculo
 
-  // Función para agregar valores al input
   void _agregarInput(String valor) {
     setState(() {
       if (_esNuevoCalculo && !_esOperador(valor)) {
         _input = valor; // Si es nuevo cálculo, reemplaza el valor
-        _esNuevoCalculo = false; // Desactiva la opción de nuevo cálculo
+        _esNuevoCalculo = false;
       } else {
         _input += valor;
       }
@@ -29,31 +28,37 @@ class CalculadoraState extends State<Calculadora> {
   void _evaluarResultado() {
     setState(() {
       if (_input.isEmpty || _esOperador(_input[_input.length - 1])) {
-        return; // Evita evaluar si el último carácter es un operador
+        return;
       }
 
       try {
-        // Reemplazamos 'x' por '*' y '%' por '/100'
-        String expresion = _input.replaceAll('x', '*').replaceAll('%', '/100');
-        ShuntingYardParser p =
-            ShuntingYardParser(); // Uso de ShuntingYardParser
+        String expresion = _input.replaceAll('x', '*');
+
+        expresion = _convertirPorcentaje(expresion);
+
+        ShuntingYardParser p = ShuntingYardParser();
         Expression exp = p.parse(expresion);
         ContextModel cm = ContextModel();
         double evalResult = exp.evaluate(EvaluationType.REAL, cm);
 
-        // Limitar el resultado a dos decimales, y evitar los decimales si es un número entero
         _output =
             evalResult == evalResult.toInt()
                 ? evalResult.toInt().toString()
                 : evalResult.toStringAsFixed(2);
 
-        // El resultado se coloca en el input para continuar operando
         _input = _output;
-        _esNuevoCalculo =
-            true; // Permite que el próximo número sea como nuevo cálculo
+        _esNuevoCalculo = true;
       } catch (e) {
         _output = 'Error';
       }
+    });
+  }
+
+  // Función para convertir porcentaje en la operación
+  String _convertirPorcentaje(String expresion) {
+    RegExp porcentajeRegExp = RegExp(r'(\d+)%');
+    return expresion.replaceAllMapped(porcentajeRegExp, (match) {
+      return '${match.group(1)}*0.01';
     });
   }
 
@@ -75,12 +80,21 @@ class CalculadoraState extends State<Calculadora> {
     });
   }
 
+  // Función para reutilizar el resultado
+  void _rehusarResultado() {
+    setState(() {
+      if (_output.isNotEmpty) {
+        _input = _output;
+        _esNuevoCalculo = false;
+      }
+    });
+  }
+
   // Verifica si el carácter es un operador
   bool _esOperador(String valor) {
     return ['+', '-', 'x', '/', '%'].contains(valor);
   }
 
-  // Verifica si ya se ha colocado un punto decimal en el número actual
   bool _esDecimal() {
     return _input.contains('.');
   }
@@ -115,7 +129,7 @@ class CalculadoraState extends State<Calculadora> {
               ),
             ),
             const SizedBox(height: 20),
-            // Recubrimiento de la pantalla de cálculo
+
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -126,7 +140,6 @@ class CalculadoraState extends State<Calculadora> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    // Entrada de la calculadora
                     Container(
                       width: double.infinity,
                       height: 80,
@@ -168,13 +181,24 @@ class CalculadoraState extends State<Calculadora> {
             _filaBotones(['7', '8', '9', '-']),
             _filaBotones([',', '0', '=', '%']),
             const SizedBox(height: 20),
-            // Botones de borrar
+
+            ElevatedButton(
+              onPressed: _rehusarResultado,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                backgroundColor: Color(0xFF34214d), // Color morado #34214d
+              ),
+              child: Text(
+                'Usar Resultado',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [_crearBotonBorrar('DEL'), _crearBotonBorrar('C')],
             ),
             const SizedBox(height: 40),
-            // Texto de Programación III y Hecho por...
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
@@ -198,7 +222,6 @@ class CalculadoraState extends State<Calculadora> {
     );
   }
 
-  // Genera una fila de botones
   Widget _filaBotones(List<String> valores) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -221,7 +244,7 @@ class CalculadoraState extends State<Calculadora> {
       style: ElevatedButton.styleFrom(
         shape: CircleBorder(),
         padding: EdgeInsets.all(25),
-        backgroundColor: Color(0xFF34214d), // Color morado #34214d
+        backgroundColor: Color(0xFF34214d),
       ),
       child: Text(
         texto,
@@ -243,12 +266,7 @@ class CalculadoraState extends State<Calculadora> {
       style: ElevatedButton.styleFrom(
         shape: CircleBorder(),
         padding: EdgeInsets.all(25),
-        backgroundColor: const Color.fromARGB(
-          255,
-          170,
-          47,
-          38,
-        ), // Color rojo para borrar
+        backgroundColor: Colors.red,
       ),
       child: Text(
         texto,
