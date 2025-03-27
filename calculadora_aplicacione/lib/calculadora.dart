@@ -9,14 +9,15 @@ class Calculadora extends StatefulWidget {
 }
 
 class CalculadoraState extends State<Calculadora> {
-  String _input = ''; // Entrada de datos del usuario
-  String _output = ''; // Resultado de la operación
-  bool _esNuevoCalculo = true; // Control de nuevo cálculo
+  String _input = '';
+  String _output = '';
+  bool _esNuevoCalculo = true;
 
+  // Función para agregar valores al input.
   void _agregarInput(String valor) {
     setState(() {
       if (_esNuevoCalculo && !_esOperador(valor)) {
-        _input = valor; // Si es nuevo cálculo, reemplaza el valor
+        _input = valor;
         _esNuevoCalculo = false;
       } else {
         _input += valor;
@@ -33,7 +34,6 @@ class CalculadoraState extends State<Calculadora> {
 
       try {
         String expresion = _input.replaceAll('x', '*');
-
         expresion = _convertirPorcentaje(expresion);
 
         ShuntingYardParser p = ShuntingYardParser();
@@ -95,6 +95,7 @@ class CalculadoraState extends State<Calculadora> {
     return ['+', '-', 'x', '/', '%'].contains(valor);
   }
 
+  // Verifica si ya se ha colocado un punto decimal en el número actual
   bool _esDecimal() {
     return _input.contains('.');
   }
@@ -129,7 +130,6 @@ class CalculadoraState extends State<Calculadora> {
               ),
             ),
             const SizedBox(height: 20),
-
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -142,7 +142,7 @@ class CalculadoraState extends State<Calculadora> {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 80,
+                      height: 60,
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(10),
@@ -155,7 +155,6 @@ class CalculadoraState extends State<Calculadora> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Resultado
                     Container(
                       width: double.infinity,
                       height: 60,
@@ -175,18 +174,16 @@ class CalculadoraState extends State<Calculadora> {
               ),
             ),
             const SizedBox(height: 20),
-            // Botones
             _filaBotones(['1', '2', '3', 'x']),
             _filaBotones(['4', '5', '6', '+']),
             _filaBotones(['7', '8', '9', '-']),
             _filaBotones([',', '0', '=', '%']),
             const SizedBox(height: 20),
-
             ElevatedButton(
               onPressed: _rehusarResultado,
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-                backgroundColor: Color(0xFF34214d), // Color morado #34214d
+                backgroundColor: Color(0xFF34214d),
               ),
               child: Text(
                 'Usar Resultado',
@@ -229,7 +226,6 @@ class CalculadoraState extends State<Calculadora> {
     );
   }
 
-  // Botón estándar
   Widget _crearBoton(String texto) {
     return ElevatedButton(
       onPressed: () {
@@ -253,7 +249,6 @@ class CalculadoraState extends State<Calculadora> {
     );
   }
 
-  // Botón para borrar
   Widget _crearBotonBorrar(String texto) {
     return ElevatedButton(
       onPressed: () {
@@ -266,7 +261,7 @@ class CalculadoraState extends State<Calculadora> {
       style: ElevatedButton.styleFrom(
         shape: CircleBorder(),
         padding: EdgeInsets.all(25),
-        backgroundColor: Colors.red,
+        backgroundColor: const Color.fromARGB(255, 185, 51, 42),
       ),
       child: Text(
         texto,

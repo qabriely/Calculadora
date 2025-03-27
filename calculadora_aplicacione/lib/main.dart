@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculadora',
+      title: 'Calculadora Aplicación',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       initialRoute: '/', // Ruta inicial
       routes: rutas, // rutas definidas en ruta.dart

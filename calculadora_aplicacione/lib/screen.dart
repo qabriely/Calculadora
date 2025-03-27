@@ -9,7 +9,7 @@ class InformacionScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Información")),
       body: Center(
         child: Text(
-          "Información del desarrollador aquí.",
+          "Información del desarrollador.",
           style: TextStyle(fontSize: 20),
         ),
       ),
