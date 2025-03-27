@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'calculadora.dart';
 import 'screen.dart';
 
-Map<String, WidgetBuilder> rutas = {
+final rutas = {
   '/': (context) => const Calculadora(),
-  '/info': (context) => const Screen(),
+  '/screen': (context) => const Screen(),
 };

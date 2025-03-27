@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ruta.dart';
+import 'ruta.dart'; // Importamos las rutas
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Calculadora Básica',
-      initialRoute: '/',
+      title: 'Calculadora',
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      initialRoute: '/', // Ruta inicial
       routes: rutas,
     );
   }
